@@ -21,9 +21,10 @@ jobs:
       - name: Deploy Bicep Template
         working-directory: '${{github.workspace}}/src/'
         run: |
+            az group create --name myasppgwdeploytest --location australiaeast 
             az deployment group create --mode Complete --debug --verbose  \
             --name AppGWDeployment \
             --resource-group myasppgwdeploytest  \
             --template-file ./main.bicep \
-            --location australiaeast
+            --parameters adminUsername=rizzadmin
 
