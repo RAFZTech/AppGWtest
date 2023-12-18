@@ -1,1 +1,29 @@
-﻿
+﻿# This is a basic workflow to help you get started with Actions
+
+on: [push]
+
+name: AzureArmDeploy
+
+jobs:
+
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+
+      - name: login to azure
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURELOGIN_CREDENTIALS }}'
+
+      - name: CheckOut source code
+        uses: actions/checkout@v2
+
+      - name: Deploy Bicep Template
+        working-directory: '${{github.workspace}}/src/'
+        run: |
+            az deployment group create --mode Complete --debug --verbose  \
+            --name AppGWDeployment \
+            --resource-group myasppgwdeploytest  \
+            --template-file ./main.bicep \
+            --location australiaeast
+
